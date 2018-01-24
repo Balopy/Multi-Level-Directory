@@ -12,9 +12,8 @@
 
 @interface BLTreeTableView ()<UITableViewDataSource,UITableViewDelegate>
 
-@property (nonatomic , strong) NSArray *data;//传递过来已经组织好的数据（全量数据）
-
-@property (nonatomic , strong) NSMutableArray *tempData;//用于存储数据源（部分数据）
+/*! 用于存储数据源 */
+@property (nonatomic , strong) NSMutableArray *tempData;
 
 
 @end
@@ -75,9 +74,10 @@
     NSUInteger endPosition = startPosition;
     BOOL expand = NO;
     
-    parentNode.expand = !parentNode.expand;
+    parentNode.expand = !parentNode.expand; //折叠与否
     NSArray *chapterArr = parentNode.subList;//取出章
-    if (parentNode.expand) {
+   
+    if (parentNode.expand) {//展开
         
         for (int k = 0; k < chapterArr.count; k ++) {
             
@@ -85,10 +85,10 @@
             
             [_tempData insertObject:chapterNode atIndex:endPosition];
             
-            expand = YES;
+            expand = YES;//如果有爹，且有儿子，则可以展开
             endPosition++;
         }
-    } else {
+    } else {//折叠
         
         endPosition = [self removeAllNodesAtParentNode:parentNode];
     }
@@ -114,10 +114,8 @@
 
 /**
  *  删除该父节点下的所有子节点（包括孙子节点）
- *
- *  @param parentNode 父节点
- *
- *  @return 该父节点下一个相邻的统一级别的节点的位置
+ *  parentNode 父节点
+ *  返回此爹下一个爹的节点位置
  */
 -(NSUInteger)removeAllNodesAtParentNode : (BLCourseListModel *)parentNode
 {
